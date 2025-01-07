@@ -15,7 +15,7 @@ namespace Assignment18
 
         public void PrintPosition()
         {
-            Console.WriteLine("Position: X = " + X + ", Y = " + Y + ", Z = " + Z);
+            Debug.Log("Position: X = " + X + ", Y = " + Y + ", Z = " + Z);
         }
     }
 
@@ -27,8 +27,11 @@ namespace Assignment18
 
         public int Health
         {
-            get => _health;
-            set => _health = Math.Clamp(value, 0, 100);
+            get {return _health;}
+            set { if (value > 100) _health = 100;
+                   else if (value < 0) _health = 0;
+                 else _health = value;
+                }
         }
 
         public Character(string name, int health, Position position)
@@ -42,9 +45,61 @@ namespace Assignment18
 
         public virtual void DisplayInfo()
         {
-            Console.WriteLine("Name: " + Name);
-            Console.WriteLine("Health: " + Health);
+            Debug.Log("Name: " + Name);
+            Debug.Log("Health: " + Health);
             Position.PrintPosition();
         }
     }
+}
+  public void Attack(int damage, Character target)
+        {
+            PerformAttack(damage, target, null);
+        }
+
+        public void Attack(int damage, Character target, string attackType)
+        {
+            PerformAttack(damage, target, attackType);
+        }
+
+        private void PerformAttack(int damage, Character target, string attackType)
+        {
+            target.Health -= damage;
+            if (attackType != null)
+              {
+                 Debug.Log(Name + " performed a " + attackType + " attack on " + target.Name + ", dealing " + damage + " damage.");
+              }
+              else
+             {
+                 Debug.Log(Name + " attacked " + target.Name + ", dealing " + damage + " damage.");
+             }
+        }
+    
+
+    public class Soldier : Character
+    {
+        public Soldier(string name, int health, Position position) : base(name, health, position)
+        {
+        }
+        public Soldier() : base() 
+        {
+        }
+        public override void DisplayInfo()
+        {
+            Debug.Log("Soldier");
+            base.DisplayInfo();
+        }
+    }
+
+    public class Officer : Character
+    {
+        public Officer(string name, int health, Position position) : base(name, health, position) { }
+
+        public override void DisplayInfo()
+        {
+            Debug.Log("Officer");
+            base.DisplayInfo();
+        }
+    }
+
+
 }
